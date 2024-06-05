@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Editor.js in Flutter</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest/dist/editor.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest/dist/editor.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/image@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@editorjs/paragraph@latest"></script>
+  </head>
+  <body>
+    <div id="editorjs"></div>
+    <script>
+      const editor = new EditorJS({
+        holder: "editorjs",
+        tools: {
+          header: {
+            class: Header,
+            inlineToolbar: true,
+          },
+          list: {
+            class: List,
+            inlineToolbar: true,
+          },
+          // image: {
+          //     class: ImageTool,
+          //     config: {
+          //         endpoints: {
+          //             byFile: 'http://localhost:8008/uploadFile',
+          //             byUrl: 'http://localhost:8008/fetchUrl',
+          //         }
+          //     }
+          // },
+          paragraph: {
+            class: Paragraph,
+            inlineToolbar: true,
+          },
+        },
+      });
+      editor.isReady
+        .then(() => {
+          console.log("Editor.js is ready to work!ssssss");
+          window.flutter_inappwebview.postMessage("555555555");
+          /** Do anything you need after editor initialization */
+        })
+        .catch((reason) => {
+          console.log(`Editor.js initialization failed because of ${reason}`);
+        });
+
+      function getEditorData() {
+        editor
+          .save()
+          .then((outputData) => {
+            console.log("outputData", outputData);
+            const myJSON = JSON.stringify(outputData);
+            window.flutter_inappwebview.postMessage(myJSON);
+          })
+          .catch((error) => {
+            console.log("Saving failed: ", error);
+          });
+      }
+    </script>
+  </body>
+</html>
